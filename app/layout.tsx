@@ -1,14 +1,21 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Manrope, Syne } from "next/font/google"
 import "./globals.css"
 import { Header } from "@/components/layout/header"
 import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
 import { ThemeProvider } from "@/components/theme-provider"
 
-const inter = Inter({
+const manrope = Manrope({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+})
+
+const syne = Syne({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  display: "swap",
 })
 
 export const metadata: Metadata = {
@@ -35,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="de" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang="de" className={`${manrope.variable} ${syne.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <Header />

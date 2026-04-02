@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsx:*)",
+      "Bash(npm install:*)",
+      "Bash(npx supabase:*)",
+      "Bash(supabase --version)",
+      "Bash(openssl rand:*)",
+      "Bash(node:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm run:*)"
+    ]
+  }
+}

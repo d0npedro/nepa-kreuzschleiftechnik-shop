@@ -12,6 +12,7 @@
 
 import { createClient } from "@supabase/supabase-js"
 import { PrismaClient } from "@prisma/client"
+import { PrismaPg } from "@prisma/adapter-pg"
 
 const ADMIN_EMAIL = "admin@nepa.de"
 const ADMIN_PASSWORD = "passwort"
@@ -29,7 +30,8 @@ async function main() {
     auth: { autoRefreshToken: false, persistSession: false },
   })
 
-  const prisma = new PrismaClient()
+  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+  const prisma = new PrismaClient({ adapter })
 
   try {
     // 1. Create Supabase Auth user (or get existing)
