@@ -44,7 +44,11 @@ const placeholderProducts = [
   { id: "4", name: "Honöl Spezial 5L", slug: "honoel-spezial-5l", sku: "HO-SP-5L", price: 62.0, stock: 32, category: { name: "Honöle & Kühlmittel", slug: "honoel-kuehlmittel" }, images: [] },
 ]
 
-const manufacturers = ["Sunnen", "Gehring", "Nagel"]
+const manufacturers = [
+  { name: "Sunnen", image: "/images/machines/sunnen-mbc1805g.jpg" },
+  { name: "Gehring", image: "/images/products/powerhone-v.jpg" },
+  { name: "Nagel", image: "/images/products/ultrahone-v.jpg" },
+]
 
 /* ------------------------------------------------------------------ */
 /*  Page                                                               */
@@ -77,6 +81,12 @@ export default async function HomePage() {
       {/*  1. HERO                                                      */}
       {/* ============================================================ */}
       <section className="relative isolate overflow-hidden bg-nepa-blue">
+        {/* Background image from nepa.de */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: "url('/images/hero/nepa-hero.jpg')" }}
+        />
         {/* Subtle industrial grid overlay */}
         <div
           aria-hidden="true"
@@ -145,21 +155,31 @@ export default async function HomePage() {
 
           {/* Manufacturer cards */}
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {manufacturers.map((name) => (
+            {manufacturers.map((mfr) => (
               <Link
-                key={name}
+                key={mfr.name}
                 href="/finder"
-                className="group flex items-center justify-between rounded-xl border border-nepa-blue/10 bg-white p-5 shadow-sm transition hover:border-nepa-green/40 hover:shadow-md"
+                className="group overflow-hidden rounded-xl border border-nepa-blue/10 bg-white shadow-sm transition hover:border-nepa-green/40 hover:shadow-md"
               >
-                <div>
-                  <p className="text-sm font-medium text-nepa-blue/50">
-                    Hersteller
-                  </p>
-                  <p className="mt-1 text-lg font-bold text-nepa-blue">
-                    {name}
-                  </p>
+                <div className="relative h-32 overflow-hidden bg-muted">
+                  <img
+                    src={mfr.image}
+                    alt={mfr.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 </div>
-                <ChevronRight className="size-5 text-nepa-blue/30 transition group-hover:text-nepa-green" />
+                <div className="flex items-center justify-between p-4">
+                  <div>
+                    <p className="text-sm font-medium text-nepa-blue/50">
+                      Hersteller
+                    </p>
+                    <p className="mt-0.5 text-lg font-bold text-nepa-blue">
+                      {mfr.name}
+                    </p>
+                  </div>
+                  <ChevronRight className="size-5 text-nepa-blue/30 transition group-hover:text-nepa-green" />
+                </div>
               </Link>
             ))}
           </div>
