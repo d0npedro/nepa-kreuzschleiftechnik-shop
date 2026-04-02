@@ -1,0 +1,93 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  products Product[]
+}
+
+model Machine {
+  id           String           @id @default(cuid())
+  manufacturer String
+  name         String
+  slug         String           @unique
+  description  String?
+  products     ProductMachine[]
+}
+
+model ProductMachine {
+  productId String
+  machineId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  machine   Machine @relation(fields: [machineId], references: [id], onDelete: Cascade)
+
+  @@id([productId, machineId])
+}
+
+model Product {
+  id                 String           @id @default(cuid())
+  sku                String           @unique
+  name               String
+  slug               String           @unique
+  description        String?
+  price              Decimal          @db.Decimal(10, 2)
+  stock              Int              @default(0)
+  categoryId         String
+  category           Category         @relation(fields: [categoryId], references: [id])
+  images             Json             @default("[]")
+  pdfUrl             String?
+  isUsed             Boolean          @default(false)
+  isB2BOnly          Boolean          @default(false)
+  compatibleMachines ProductMachine[]
+  orderItems         OrderItem[]
+  inventoryLogs      InventoryLog[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  customerId      String
+  customerEmail   String?
+  status          String      @default("PENDING")
+  total           Decimal     @db.Decimal(10, 2)
+  stripeSessionId String?     @unique
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model InventoryLog {
+  id        String   @id @default(cuid())
+  productId String
+  change    Int
+  reason    String
+  userId    String?
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model AdminUser {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  role       String   @default("ADMIN")
+  supabaseId String   @unique
+  createdAt  DateTime @default(now())
+}
